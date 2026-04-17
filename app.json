@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "SmartWardrobeAssistant",
-    "slug": "SmartWardrobeAssistant",
+    "name": "SWA",
+    "slug": "SWA",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,9 +13,16 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "SWA utilise ta position pour récupérer la météo locale et recommander une tenue adaptée."
+      }
     },
     "android": {
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

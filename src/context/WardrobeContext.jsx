@@ -42,6 +42,14 @@ export function WardrobeProvider({ children }) {
       setWeather(newWeather);
       return newWeather;
     } catch (error) {
+      if (error.message === 'LOCATION_PERMISSION_DENIED') {
+        Alert.alert(
+          'Localisation refusée',
+          'Autorise la localisation pour obtenir la météo de ta position.'
+        );
+        return null;
+      }
+
       Alert.alert('Météo indisponible', 'Impossible de récupérer la météo.');
       return null;
     } finally {
