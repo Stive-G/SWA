@@ -1,10 +1,12 @@
-import { Image, Text, View } from 'react-native';
+import { Image, Pressable, Text, View } from 'react-native';
 import { clothingCardStyles as styles } from '../styles/clothingCardStyles';
 import { Button } from './Button';
 
-export function ClothingCard({ item, onDelete }) {
+export function ClothingCard({ item, onDelete, onPress }) {
+  const CardWrapper = onPress ? Pressable : View;
+
   return (
-    <View style={styles.card}>
+    <CardWrapper style={styles.card} onPress={onPress}>
       {item.imageUrl ? (
         <Image source={{ uri: item.imageUrl }} style={styles.image} />
       ) : null}
@@ -26,6 +28,6 @@ export function ClothingCard({ item, onDelete }) {
       {onDelete && (
         <Button label="Supprimer" variant="danger" onPress={onDelete} />
       )}
-    </View>
+    </CardWrapper>
   );
 }

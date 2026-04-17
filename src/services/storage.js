@@ -3,7 +3,7 @@ import { API_BASE_URL } from '@env';
 const baseUrl = API_BASE_URL || 'http://localhost:3000';
 
 function buildImagePart(imageUri) {
-  if (!imageUri) {
+  if (!imageUri || imageUri.startsWith('http')) {
     return null;
   }
 
@@ -50,6 +50,35 @@ export async function createClothing(form, temperatureMin, temperatureMax) {
 
   if (!response.ok) {
     throw new Error('CREATE_CLOTHING_FAILED');
+  }
+
+  return response.json();
+}
+
+export async function updateStoredClothing(id, form, temperatureMin, temperatureMax) {
+  const body = new FormData();
+
+  body.append('name', form.name);
+  body.append('type', form.type);
+  body.append('style', form.style);
+  body.append('color', form.color);
+  body.append('isWaterproof', String(form.isWaterproof));
+  body.append('temperatureMin', String(temperatureMin));
+  body.append('temperatureMax', String(temperatureMax));
+
+  const image = buildImagePart(form.imageUri);
+
+  if (image) {
+    body.append('image', image);
+  }
+
+  const response = await fetch(`${baseUrl}/api/clothes/${id}`, {
+    method: 'PUT',
+    body,
+  });
+
+  if (!response.ok) {
+    throw new Error('UPDATE_CLOTHING_FAILED');
   }
 
   return response.json();

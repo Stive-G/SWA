@@ -112,6 +112,41 @@ app.post('/api/clothes', upload.single('image'), async (req, res, next) => {
   }
 });
 
+app.put('/api/clothes/:id', upload.single('image'), async (req, res, next) => {
+  try {
+    const clothing = await Clothing.findById(req.params.id);
+
+    if (!clothing) {
+      res.status(404).json({ message: 'Clothing not found' });
+      return;
+    }
+
+    if (req.file) {
+      const image = await uploadToCloudinary(req.file);
+
+      if (clothing.imagePublicId) {
+        await cloudinary.uploader.destroy(clothing.imagePublicId);
+      }
+
+      clothing.imageUrl = image.secure_url;
+      clothing.imagePublicId = image.public_id;
+    }
+
+    clothing.name = req.body.name;
+    clothing.type = req.body.type;
+    clothing.style = req.body.style;
+    clothing.color = req.body.color;
+    clothing.isWaterproof = req.body.isWaterproof === 'true';
+    clothing.temperatureMin = Number(req.body.temperatureMin);
+    clothing.temperatureMax = Number(req.body.temperatureMax);
+
+    const updatedClothing = await clothing.save();
+    res.json(updatedClothing);
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.delete('/api/clothes/:id', async (req, res, next) => {
   try {
     const clothing = await Clothing.findByIdAndDelete(req.params.id);
