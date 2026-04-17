@@ -17,8 +17,7 @@ export function WardrobeScreen() {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [1, 1],
+      allowsEditing: false,
       mediaTypes: ['images'],
       quality: 0.8,
     });
@@ -35,7 +34,7 @@ export function WardrobeScreen() {
       <View style={styles.form}>
         <TextInput
           style={styles.input}
-          placeholder="Nom du vetement"
+          placeholder="Nom du vêtement"
           value={form.name}
           onChangeText={(text) => wardrobeData.setForm({ ...form, name: text })}
         />
@@ -62,7 +61,7 @@ export function WardrobeScreen() {
         />
 
         <View style={styles.switchRow}>
-          <Text style={styles.switchLabel}>Impermeable</Text>
+          <Text style={styles.switchLabel}>Imperméable</Text>
           <Switch
             value={form.isWaterproof}
             onValueChange={(value) => wardrobeData.setForm({ ...form, isWaterproof: value })}
@@ -97,7 +96,7 @@ export function WardrobeScreen() {
           onPress={pickImage}
         />
 
-        <Button label="Ajouter le vetement" onPress={wardrobeData.addClothing} />
+        <Button label="Ajouter le vêtement" onPress={wardrobeData.addClothing} />
       </View>
 
       {wardrobeData.wardrobe.map((item) => (

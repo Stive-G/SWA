@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "SWA utilise ta galerie pour ajouter une photo a un vetement."
+        "NSPhotoLibraryUsageDescription": "SWA utilise ta galerie pour ajouter une photo à un vêtement."
       }
     },
     "android": {

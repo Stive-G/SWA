@@ -29,7 +29,7 @@ export function WardrobeProvider({ children }) {
         setWardrobe(savedWardrobe);
       }
     } catch (error) {
-      Alert.alert('Armoire indisponible', 'Impossible de charger les vetements depuis le serveur.');
+      Alert.alert('Armoire indisponible', 'Impossible de charger les vêtements depuis le serveur.');
     }
   }
 
@@ -41,7 +41,7 @@ export function WardrobeProvider({ children }) {
       setWeather(newWeather);
       return newWeather;
     } catch (error) {
-      Alert.alert('Meteo indisponible', 'Impossible de recuperer la meteo.');
+      Alert.alert('Météo indisponible', 'Impossible de récupérer la météo.');
       return null;
     } finally {
       setLoadingWeather(false);
@@ -92,7 +92,7 @@ export function WardrobeProvider({ children }) {
       setWardrobe([newClothing, ...wardrobe]);
       setForm(emptyClothingForm);
     } catch (error) {
-      Alert.alert('Ajout impossible', 'Impossible d enregistrer le vetement.');
+      Alert.alert('Ajout impossible', 'Impossible d’enregistrer le vêtement.');
     }
   }
 
@@ -101,7 +101,7 @@ export function WardrobeProvider({ children }) {
       await deleteStoredClothing(id);
       setWardrobe(wardrobe.filter((item) => item.id !== id));
     } catch (error) {
-      Alert.alert('Suppression impossible', 'Impossible de supprimer le vetement.');
+      Alert.alert('Suppression impossible', 'Impossible de supprimer le vêtement.');
     }
   }
 
