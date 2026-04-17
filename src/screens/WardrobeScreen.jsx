@@ -1,4 +1,5 @@
-import { ScrollView, Switch, Text, TextInput, View } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { Image, ScrollView, Switch, Text, TextInput, View } from 'react-native';
 import { Button } from '../components/Button';
 import { ClothingCard } from '../components/ClothingCard';
 import { useWardrobe } from '../context/WardrobeContext';
@@ -8,6 +9,25 @@ export function WardrobeScreen() {
   const wardrobeData = useWardrobe();
   const form = wardrobeData.form;
 
+  async function pickImage() {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permission.granted) {
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [1, 1],
+      mediaTypes: ['images'],
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      wardrobeData.setForm({ ...form, imageUri: result.assets[0].uri });
+    }
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.screen}>
       <Text style={styles.title}>Armoire</Text>
@@ -15,7 +35,7 @@ export function WardrobeScreen() {
       <View style={styles.form}>
         <TextInput
           style={styles.input}
-          placeholder="Nom du vêtement"
+          placeholder="Nom du vetement"
           value={form.name}
           onChangeText={(text) => wardrobeData.setForm({ ...form, name: text })}
         />
@@ -42,7 +62,7 @@ export function WardrobeScreen() {
         />
 
         <View style={styles.switchRow}>
-          <Text style={styles.switchLabel}>Imperméable</Text>
+          <Text style={styles.switchLabel}>Impermeable</Text>
           <Switch
             value={form.isWaterproof}
             onValueChange={(value) => wardrobeData.setForm({ ...form, isWaterproof: value })}
@@ -67,7 +87,17 @@ export function WardrobeScreen() {
           />
         </View>
 
-        <Button label="Ajouter le vêtement" onPress={wardrobeData.addClothing} />
+        {form.imageUri ? (
+          <Image source={{ uri: form.imageUri }} style={styles.imagePreview} />
+        ) : null}
+
+        <Button
+          label={form.imageUri ? 'Changer la photo' : 'Ajouter une photo'}
+          variant="secondary"
+          onPress={pickImage}
+        />
+
+        <Button label="Ajouter le vetement" onPress={wardrobeData.addClothing} />
       </View>
 
       {wardrobeData.wardrobe.map((item) => (

@@ -13,9 +13,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "SWA utilise ta galerie pour ajouter une photo a un vetement."
+      }
     },
     "android": {
+      "permissions": [
+        "READ_MEDIA_IMAGES"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
