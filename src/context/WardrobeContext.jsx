@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { emptyClothingForm } from '../constants/forms';
 import { defaultWardrobe } from '../data/defaults';
 import { generateRecommendation } from '../services/aiService';
-import { loadWardrobe, saveWardrobe } from '../services/storage';
+import { createClothing, deleteStoredClothing, loadWardrobe } from '../services/storage';
 import { fetchCurrentWeather } from '../services/weather';
 
 const WardrobeContext = createContext();
@@ -22,16 +22,15 @@ export function WardrobeProvider({ children }) {
   }, []);
 
   async function getSavedWardrobe() {
-    const savedWardrobe = await loadWardrobe();
+    try {
+      const savedWardrobe = await loadWardrobe();
 
-    if (savedWardrobe) {
-      setWardrobe(savedWardrobe);
+      if (savedWardrobe) {
+        setWardrobe(savedWardrobe);
+      }
+    } catch (error) {
+      Alert.alert('Armoire indisponible', 'Impossible de charger les vetements depuis le serveur.');
     }
-  }
-
-  async function updateWardrobe(newWardrobe) {
-    setWardrobe(newWardrobe);
-    await saveWardrobe(newWardrobe);
   }
 
   async function refreshWeather() {
@@ -44,13 +43,13 @@ export function WardrobeProvider({ children }) {
     } catch (error) {
       if (error.message === 'LOCATION_PERMISSION_DENIED') {
         Alert.alert(
-          'Localisation refusée',
-          'Autorise la localisation pour obtenir la météo de ta position.'
+          'Localisation refusee',
+          'Autorise la localisation pour obtenir la meteo de ta position.'
         );
         return null;
       }
 
-      Alert.alert('Météo indisponible', 'Impossible de récupérer la météo.');
+      Alert.alert('Meteo indisponible', 'Impossible de recuperer la meteo.');
       return null;
     } finally {
       setLoadingWeather(false);
@@ -75,16 +74,16 @@ export function WardrobeProvider({ children }) {
       setRecommendation(result);
       return true;
     } catch (error) {
-      Alert.alert('Recommandation impossible', 'Une erreur est arrivée avec l’IA.');
+      Alert.alert('Recommandation impossible', 'Une erreur est arrivee avec l IA.');
       return false;
     } finally {
       setLoadingRecommendation(false);
     }
   }
 
-  function addClothing() {
+  async function addClothing() {
     if (form.name === '' || form.type === '' || form.style === '' || form.color === '') {
-      Alert.alert('Champs manquants', 'Tous les champs texte doivent être remplis.');
+      Alert.alert('Champs manquants', 'Tous les champs texte doivent etre remplis.');
       return;
     }
 
@@ -92,30 +91,26 @@ export function WardrobeProvider({ children }) {
     const temperatureMax = Number(form.temperatureMax);
 
     if (Number.isNaN(temperatureMin) || Number.isNaN(temperatureMax)) {
-      Alert.alert('Température invalide', 'Les températures doivent être des nombres.');
+      Alert.alert('Temperature invalide', 'Les temperatures doivent etre des nombres.');
       return;
     }
 
-    const newClothing = {
-      id: Date.now().toString(),
-      name: form.name,
-      type: form.type,
-      style: form.style,
-      color: form.color,
-      isWaterproof: form.isWaterproof,
-      temperatureMin: temperatureMin,
-      temperatureMax: temperatureMax,
-    };
-
-    const newWardrobe = [newClothing, ...wardrobe];
-
-    updateWardrobe(newWardrobe);
-    setForm(emptyClothingForm);
+    try {
+      const newClothing = await createClothing(form, temperatureMin, temperatureMax);
+      setWardrobe([newClothing, ...wardrobe]);
+      setForm(emptyClothingForm);
+    } catch (error) {
+      Alert.alert('Ajout impossible', 'Impossible d enregistrer le vetement.');
+    }
   }
 
-  function deleteClothing(id) {
-    const newWardrobe = wardrobe.filter((item) => item.id !== id);
-    updateWardrobe(newWardrobe);
+  async function deleteClothing(id) {
+    try {
+      await deleteStoredClothing(id);
+      setWardrobe(wardrobe.filter((item) => item.id !== id));
+    } catch (error) {
+      Alert.alert('Suppression impossible', 'Impossible de supprimer le vetement.');
+    }
   }
 
   const selectedItems = wardrobe.filter((item) => {

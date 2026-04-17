@@ -45,4 +45,10 @@ export const wardrobeScreenStyles = StyleSheet.create({
     color: '#111827',
     fontWeight: '700',
   },
+  imagePreview: {
+    width: '100%',
+    aspectRatio: 1,
+    borderRadius: 8,
+    backgroundColor: '#e5e7eb',
+  },
 });

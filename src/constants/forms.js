@@ -6,4 +6,5 @@ export const emptyClothingForm = {
   isWaterproof: false,
   temperatureMin: '0',
   temperatureMax: '25',
+  imageUri: '',
 };

@@ -15,13 +15,15 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "SWA utilise ta position pour récupérer la météo locale et recommander une tenue adaptée."
+        "NSLocationWhenInUseUsageDescription": "SWA utilise ta position pour recuperer la meteo locale et recommander une tenue adaptee.",
+        "NSPhotoLibraryUsageDescription": "SWA utilise ta galerie pour ajouter une photo a un vetement."
       }
     },
     "android": {
       "permissions": [
         "ACCESS_COARSE_LOCATION",
-        "ACCESS_FINE_LOCATION"
+        "ACCESS_FINE_LOCATION",
+        "READ_MEDIA_IMAGES"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

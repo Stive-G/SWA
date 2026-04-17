@@ -9,6 +9,12 @@ export const clothingCardStyles = StyleSheet.create({
     backgroundColor: '#ffffff',
     padding: 14,
   },
+  image: {
+    width: '100%',
+    aspectRatio: 1,
+    borderRadius: 8,
+    backgroundColor: '#e5e7eb',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
