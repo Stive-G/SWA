@@ -19,7 +19,7 @@ export function HomeScreen({ navigation }) {
       <Text style={styles.title}>Smart Wardrobe Assistant</Text>
 
       <Text style={styles.copy}>
-        Une application pour choisir une tenue avec ton armoire, la météo et Mistral.
+        Une application pour choisir une tenue avec ton armoire, la météo et une recommandation personnalisée.
       </Text>
 
       <View style={styles.statsGrid}>
@@ -53,12 +53,6 @@ export function HomeScreen({ navigation }) {
         label="Actualiser la météo"
         variant="secondary"
         onPress={wardrobeData.refreshWeather}
-      />
-
-      <Button
-        label="Voir mon armoire"
-        variant="secondary"
-        onPress={() => navigation.navigate('Armoire')}
       />
     </ScrollView>
   );

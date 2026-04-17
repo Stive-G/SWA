@@ -1,4 +1,5 @@
 import { WEATHER_API_URL } from '@env';
+import * as Location from 'expo-location';
 
 const weatherLabels = {
   0: 'soleil',
@@ -23,8 +24,18 @@ const weatherLabels = {
 };
 
 export async function fetchCurrentWeather() {
-  const latitude = 48.8566;
-  const longitude = 2.3522;
+  const { status } = await Location.requestForegroundPermissionsAsync();
+
+  if (status !== Location.PermissionStatus.GRANTED) {
+    throw new Error('LOCATION_PERMISSION_DENIED');
+  }
+
+  const position = await Location.getCurrentPositionAsync({
+    accuracy: Location.Accuracy.Balanced,
+  });
+
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
   const baseUrl = WEATHER_API_URL || 'https://api.open-meteo.com';
   const url = `${baseUrl}/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code`;
 

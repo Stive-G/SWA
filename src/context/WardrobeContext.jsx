@@ -3,7 +3,12 @@ import { Alert } from 'react-native';
 import { emptyClothingForm } from '../constants/forms';
 import { defaultWardrobe } from '../data/defaults';
 import { generateRecommendation } from '../services/aiService';
-import { loadWardrobe, saveWardrobe } from '../services/storage';
+import {
+  createClothing,
+  deleteStoredClothing,
+  loadWardrobe,
+  updateStoredClothing,
+} from '../services/storage';
 import { fetchCurrentWeather } from '../services/weather';
 
 const WardrobeContext = createContext();
@@ -22,16 +27,15 @@ export function WardrobeProvider({ children }) {
   }, []);
 
   async function getSavedWardrobe() {
-    const savedWardrobe = await loadWardrobe();
+    try {
+      const savedWardrobe = await loadWardrobe();
 
-    if (savedWardrobe) {
-      setWardrobe(savedWardrobe);
+      if (savedWardrobe) {
+        setWardrobe(savedWardrobe);
+      }
+    } catch (error) {
+      Alert.alert('Armoire indisponible', 'Impossible de charger les vêtements depuis le serveur.');
     }
-  }
-
-  async function updateWardrobe(newWardrobe) {
-    setWardrobe(newWardrobe);
-    await saveWardrobe(newWardrobe);
   }
 
   async function refreshWeather() {
@@ -42,6 +46,14 @@ export function WardrobeProvider({ children }) {
       setWeather(newWeather);
       return newWeather;
     } catch (error) {
+      if (error.message === 'LOCATION_PERMISSION_DENIED') {
+        Alert.alert(
+          'Localisation refusée',
+          'Autorise la localisation pour obtenir la météo de ta position.'
+        );
+        return null;
+      }
+
       Alert.alert('Météo indisponible', 'Impossible de récupérer la météo.');
       return null;
     } finally {
@@ -74,40 +86,86 @@ export function WardrobeProvider({ children }) {
     }
   }
 
-  function addClothing() {
-    if (form.name === '' || form.type === '' || form.style === '' || form.color === '') {
+  async function addClothingData(clothingForm) {
+    if (
+      clothingForm.name === '' ||
+      clothingForm.type === '' ||
+      clothingForm.style === '' ||
+      clothingForm.color === ''
+    ) {
       Alert.alert('Champs manquants', 'Tous les champs texte doivent être remplis.');
-      return;
+      return false;
     }
 
-    const temperatureMin = Number(form.temperatureMin);
-    const temperatureMax = Number(form.temperatureMax);
+    const temperatureMin = Number(clothingForm.temperatureMin);
+    const temperatureMax = Number(clothingForm.temperatureMax);
 
     if (Number.isNaN(temperatureMin) || Number.isNaN(temperatureMax)) {
       Alert.alert('Température invalide', 'Les températures doivent être des nombres.');
-      return;
+      return false;
     }
 
-    const newClothing = {
-      id: Date.now().toString(),
-      name: form.name,
-      type: form.type,
-      style: form.style,
-      color: form.color,
-      isWaterproof: form.isWaterproof,
-      temperatureMin: temperatureMin,
-      temperatureMax: temperatureMax,
-    };
-
-    const newWardrobe = [newClothing, ...wardrobe];
-
-    updateWardrobe(newWardrobe);
-    setForm(emptyClothingForm);
+    try {
+      const newClothing = await createClothing(clothingForm, temperatureMin, temperatureMax);
+      setWardrobe([newClothing, ...wardrobe]);
+      setForm(emptyClothingForm);
+      return true;
+    } catch (error) {
+      Alert.alert('Ajout impossible', 'Impossible d’enregistrer le vêtement.');
+      return false;
+    }
   }
 
-  function deleteClothing(id) {
-    const newWardrobe = wardrobe.filter((item) => item.id !== id);
-    updateWardrobe(newWardrobe);
+  async function addClothing() {
+    return addClothingData(form);
+  }
+
+  async function updateClothing(id, clothingForm) {
+    if (
+      clothingForm.name === '' ||
+      clothingForm.type === '' ||
+      clothingForm.style === '' ||
+      clothingForm.color === ''
+    ) {
+      Alert.alert('Champs manquants', 'Tous les champs texte doivent être remplis.');
+      return false;
+    }
+
+    const temperatureMin = Number(clothingForm.temperatureMin);
+    const temperatureMax = Number(clothingForm.temperatureMax);
+
+    if (Number.isNaN(temperatureMin) || Number.isNaN(temperatureMax)) {
+      Alert.alert('Température invalide', 'Les températures doivent être des nombres.');
+      return false;
+    }
+
+    try {
+      const updatedClothing = await updateStoredClothing(
+        id,
+        clothingForm,
+        temperatureMin,
+        temperatureMax
+      );
+
+      setWardrobe(wardrobe.map((item) => (item.id === id ? updatedClothing : item)));
+      return true;
+    } catch (error) {
+      Alert.alert('Modification impossible', 'Impossible de modifier le vêtement.');
+      return false;
+    }
+  }
+
+  async function deleteClothing(id) {
+    try {
+      await deleteStoredClothing(id);
+      setWardrobe(wardrobe.filter((item) => item.id !== id));
+    } catch (error) {
+      Alert.alert('Suppression impossible', 'Impossible de supprimer le vêtement.');
+    }
+  }
+
+  function getClothingById(id) {
+    return wardrobe.find((item) => item.id === id);
   }
 
   const selectedItems = wardrobe.filter((item) => {
@@ -132,7 +190,10 @@ export function WardrobeProvider({ children }) {
         refreshWeather,
         recommendOutfit,
         addClothing,
+        addClothingData,
+        updateClothing,
         deleteClothing,
+        getClothingById,
       }}
     >
       {children}
