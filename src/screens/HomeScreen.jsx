@@ -54,12 +54,6 @@ export function HomeScreen({ navigation }) {
         variant="secondary"
         onPress={wardrobeData.refreshWeather}
       />
-
-      <Button
-        label="Voir mon armoire"
-        variant="secondary"
-        onPress={() => navigation.navigate('Armoire')}
-      />
     </ScrollView>
   );
 }
