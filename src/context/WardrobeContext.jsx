@@ -29,7 +29,7 @@ export function WardrobeProvider({ children }) {
         setWardrobe(savedWardrobe);
       }
     } catch (error) {
-      Alert.alert('Armoire indisponible', 'Impossible de charger les vetements depuis le serveur.');
+      Alert.alert('Armoire indisponible', 'Impossible de charger les vêtements depuis le serveur.');
     }
   }
 
@@ -43,13 +43,13 @@ export function WardrobeProvider({ children }) {
     } catch (error) {
       if (error.message === 'LOCATION_PERMISSION_DENIED') {
         Alert.alert(
-          'Localisation refusee',
-          'Autorise la localisation pour obtenir la meteo de ta position.'
+          'Localisation refusée',
+          'Autorise la localisation pour obtenir la météo de ta position.'
         );
         return null;
       }
 
-      Alert.alert('Meteo indisponible', 'Impossible de recuperer la meteo.');
+      Alert.alert('Météo indisponible', 'Impossible de récupérer la météo.');
       return null;
     } finally {
       setLoadingWeather(false);
@@ -74,7 +74,7 @@ export function WardrobeProvider({ children }) {
       setRecommendation(result);
       return true;
     } catch (error) {
-      Alert.alert('Recommandation impossible', 'Une erreur est arrivee avec l IA.');
+      Alert.alert('Recommandation impossible', 'Une erreur est arrivée avec l’IA.');
       return false;
     } finally {
       setLoadingRecommendation(false);
@@ -83,7 +83,7 @@ export function WardrobeProvider({ children }) {
 
   async function addClothing() {
     if (form.name === '' || form.type === '' || form.style === '' || form.color === '') {
-      Alert.alert('Champs manquants', 'Tous les champs texte doivent etre remplis.');
+      Alert.alert('Champs manquants', 'Tous les champs texte doivent être remplis.');
       return;
     }
 
@@ -91,7 +91,7 @@ export function WardrobeProvider({ children }) {
     const temperatureMax = Number(form.temperatureMax);
 
     if (Number.isNaN(temperatureMin) || Number.isNaN(temperatureMax)) {
-      Alert.alert('Temperature invalide', 'Les temperatures doivent etre des nombres.');
+      Alert.alert('Température invalide', 'Les températures doivent être des nombres.');
       return;
     }
 
@@ -100,7 +100,7 @@ export function WardrobeProvider({ children }) {
       setWardrobe([newClothing, ...wardrobe]);
       setForm(emptyClothingForm);
     } catch (error) {
-      Alert.alert('Ajout impossible', 'Impossible d enregistrer le vetement.');
+      Alert.alert('Ajout impossible', 'Impossible d’enregistrer le vêtement.');
     }
   }
 
@@ -109,7 +109,7 @@ export function WardrobeProvider({ children }) {
       await deleteStoredClothing(id);
       setWardrobe(wardrobe.filter((item) => item.id !== id));
     } catch (error) {
-      Alert.alert('Suppression impossible', 'Impossible de supprimer le vetement.');
+      Alert.alert('Suppression impossible', 'Impossible de supprimer le vêtement.');
     }
   }
 
