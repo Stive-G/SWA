@@ -168,7 +168,7 @@ app.delete('/api/clothes/:id', async (req, res, next) => {
 
 app.use((error, _req, res, _next) => {
   console.error(error);
-  res.status(500).json({ message: 'Server error' });
+  res.status(500).json({ message: error.message || 'Server error' });
 });
 
 async function start() {

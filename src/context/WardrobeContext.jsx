@@ -34,7 +34,10 @@ export function WardrobeProvider({ children }) {
         setWardrobe(savedWardrobe);
       }
     } catch (error) {
-      Alert.alert('Armoire indisponible', 'Impossible de charger les vêtements depuis le serveur.');
+      Alert.alert(
+        'Armoire indisponible',
+        `Impossible de charger les vêtements depuis le serveur.\n\n${error.message}`
+      );
     }
   }
 
@@ -111,7 +114,10 @@ export function WardrobeProvider({ children }) {
       setForm(emptyClothingForm);
       return true;
     } catch (error) {
-      Alert.alert('Ajout impossible', 'Impossible d’enregistrer le vêtement.');
+      Alert.alert(
+        'Ajout impossible',
+        `Impossible d’enregistrer le vêtement.\n\n${error.message}`
+      );
       return false;
     }
   }
@@ -150,7 +156,10 @@ export function WardrobeProvider({ children }) {
       setWardrobe(wardrobe.map((item) => (item.id === id ? updatedClothing : item)));
       return true;
     } catch (error) {
-      Alert.alert('Modification impossible', 'Impossible de modifier le vêtement.');
+      Alert.alert(
+        'Modification impossible',
+        `Impossible de modifier le vêtement.\n\n${error.message}`
+      );
       return false;
     }
   }
@@ -160,7 +169,10 @@ export function WardrobeProvider({ children }) {
       await deleteStoredClothing(id);
       setWardrobe(wardrobe.filter((item) => item.id !== id));
     } catch (error) {
-      Alert.alert('Suppression impossible', 'Impossible de supprimer le vêtement.');
+      Alert.alert(
+        'Suppression impossible',
+        `Impossible de supprimer le vêtement.\n\n${error.message}`
+      );
     }
   }
 

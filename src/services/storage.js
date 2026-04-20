@@ -2,6 +2,17 @@ import { API_BASE_URL } from '@env';
 
 const baseUrl = API_BASE_URL || 'http://localhost:3000';
 
+async function readError(response) {
+  const text = await response.text();
+
+  try {
+    const data = JSON.parse(text);
+    return data.message || text;
+  } catch (error) {
+    return text;
+  }
+}
+
 function buildImagePart(imageUri) {
   if (!imageUri || imageUri.startsWith('http')) {
     return null;
@@ -20,7 +31,7 @@ export async function loadWardrobe() {
   const response = await fetch(`${baseUrl}/api/clothes`);
 
   if (!response.ok) {
-    throw new Error('LOAD_WARDROBE_FAILED');
+    throw new Error(await readError(response));
   }
 
   return response.json();
@@ -49,7 +60,7 @@ export async function createClothing(form, temperatureMin, temperatureMax) {
   });
 
   if (!response.ok) {
-    throw new Error('CREATE_CLOTHING_FAILED');
+    throw new Error(await readError(response));
   }
 
   return response.json();
@@ -78,7 +89,7 @@ export async function updateStoredClothing(id, form, temperatureMin, temperature
   });
 
   if (!response.ok) {
-    throw new Error('UPDATE_CLOTHING_FAILED');
+    throw new Error(await readError(response));
   }
 
   return response.json();
@@ -90,6 +101,6 @@ export async function deleteStoredClothing(id) {
   });
 
   if (!response.ok) {
-    throw new Error('DELETE_CLOTHING_FAILED');
+    throw new Error(await readError(response));
   }
 }
