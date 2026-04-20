@@ -8,13 +8,14 @@ export const buttonStyles = StyleSheet.create({
     paddingVertical: 13,
   },
   primary: {
-    backgroundColor: '#2563eb',
+    backgroundColor: '#4f46e5',
   },
   secondary: {
-    backgroundColor: '#e5e7eb',
+    borderWidth: 1,
+    borderColor: '#d4d4d4',
+    backgroundColor: '#ffffff',
   },
   danger: {
-    alignSelf: 'flex-start',
     backgroundColor: '#fee2e2',
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -24,7 +25,7 @@ export const buttonStyles = StyleSheet.create({
     fontWeight: '800',
   },
   darkLabel: {
-    color: '#111827',
+    color: '#071b70',
   },
   pressed: {
     opacity: 0.85,

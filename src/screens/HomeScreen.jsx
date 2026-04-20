@@ -30,7 +30,7 @@ export function HomeScreen({ navigation }) {
 
         <View style={styles.infoBox}>
           {wardrobeData.loadingWeather ? (
-            <ActivityIndicator color="#2563eb" />
+            <ActivityIndicator color="#4f46e5" />
           ) : (
             <View>
               <Text style={styles.weatherValue}>

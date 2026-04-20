@@ -12,12 +12,15 @@ const Tab = createBottomTabNavigator();
 const WardrobeStack = createNativeStackNavigator();
 
 const headerOptions = {
+  headerStyle: {
+    backgroundColor: '#eef2f7',
+  },
   headerTitleStyle: {
-    color: '#111827',
+    color: '#071b70',
     fontSize: 18,
     fontWeight: '900',
   },
-  headerTintColor: '#111827',
+  headerTintColor: '#4f46e5',
 };
 
 function WardrobeStackNavigator() {
@@ -47,8 +50,12 @@ function AppTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         ...headerOptions,
-        tabBarActiveTintColor: '#2563eb',
-        tabBarInactiveTintColor: '#6b7280',
+        tabBarActiveTintColor: '#4f46e5',
+        tabBarInactiveTintColor: '#64748b',
+        tabBarStyle: {
+          borderTopColor: '#e5e5e5',
+          backgroundColor: '#ffffff',
+        },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '700',

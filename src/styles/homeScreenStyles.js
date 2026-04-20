@@ -2,17 +2,18 @@ import { StyleSheet } from 'react-native';
 
 export const homeScreenStyles = StyleSheet.create({
   screen: {
-    gap: 16,
+    gap: 18,
     padding: 20,
-    paddingBottom: 28,
+    paddingBottom: 32,
+    backgroundColor: '#eef2f7',
   },
   title: {
-    color: '#111827',
-    fontSize: 30,
+    color: '#071b70',
+    fontSize: 32,
     fontWeight: '900',
   },
   copy: {
-    color: '#4b5563',
+    color: '#525252',
     fontSize: 16,
     lineHeight: 23,
   },
@@ -24,23 +25,23 @@ export const homeScreenStyles = StyleSheet.create({
     flex: 1,
     gap: 8,
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor: '#e5e5e5',
     borderRadius: 8,
     backgroundColor: '#ffffff',
     padding: 16,
   },
   bigNumber: {
-    color: '#2563eb',
-    fontSize: 42,
+    color: '#38c7f3',
+    fontSize: 44,
     fontWeight: '900',
   },
   weatherValue: {
-    color: '#111827',
-    fontSize: 24,
+    color: '#8b5cf6',
+    fontSize: 26,
     fontWeight: '900',
   },
   label: {
-    color: '#4b5563',
-    fontWeight: '700',
+    color: '#64748b',
+    fontWeight: '800',
   },
 });
