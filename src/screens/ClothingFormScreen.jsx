@@ -63,15 +63,52 @@ export function ClothingFormScreen({ navigation, route }) {
         {isEditing ? 'Modifier le vêtement' : 'Ajouter un vêtement'}
       </Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Nom du vêtement"
-        value={form.name}
-        onChangeText={(text) => setForm({ ...form, name: text })}
-      />
+      <View style={styles.photoBox}>
+        {form.imageUri ? (
+          <Image source={{ uri: form.imageUri }} style={styles.imagePreview} />
+        ) : (
+          <View style={styles.imageEmpty}>
+            <Text style={styles.imageEmptyText}>Photo du vêtement</Text>
+          </View>
+        )}
 
-      <View style={styles.typeList}>
-        <Text style={styles.label}>Type</Text>
+        <Button
+          label={form.imageUri ? 'Changer la photo' : 'Ajouter une photo'}
+          variant="secondary"
+          onPress={pickImage}
+        />
+      </View>
+
+      <View style={styles.formSection}>
+        <Text style={styles.sectionTitle}>Informations</Text>
+
+        <Text style={styles.label}>Nom</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: Veste noire"
+          value={form.name}
+          onChangeText={(text) => setForm({ ...form, name: text })}
+        />
+
+        <Text style={styles.label}>Style</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: casual"
+          value={form.style}
+          onChangeText={(text) => setForm({ ...form, style: text })}
+        />
+
+        <Text style={styles.label}>Couleur</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ex: bleu"
+          value={form.color}
+          onChangeText={(text) => setForm({ ...form, color: text })}
+        />
+      </View>
+
+      <View style={styles.formSection}>
+        <Text style={styles.sectionTitle}>Type</Text>
         <View style={styles.typeGrid}>
           {clothingTypes.map((type) => (
             <Button
@@ -84,55 +121,35 @@ export function ClothingFormScreen({ navigation, route }) {
         </View>
       </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Style"
-        value={form.style}
-        onChangeText={(text) => setForm({ ...form, style: text })}
-      />
+      <View style={styles.formSection}>
+        <Text style={styles.sectionTitle}>Météo</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Couleur"
-        value={form.color}
-        onChangeText={(text) => setForm({ ...form, color: text })}
-      />
+        <View style={styles.switchRow}>
+          <Text style={styles.switchLabel}>Imperméable</Text>
+          <Switch
+            value={form.isWaterproof}
+            onValueChange={(value) => setForm({ ...form, isWaterproof: value })}
+          />
+        </View>
 
-      <View style={styles.switchRow}>
-        <Text style={styles.switchLabel}>Imperméable</Text>
-        <Switch
-          value={form.isWaterproof}
-          onValueChange={(value) => setForm({ ...form, isWaterproof: value })}
-        />
+        <View style={styles.row}>
+          <TextInput
+            style={[styles.input, styles.halfInput]}
+            keyboardType="numeric"
+            placeholder="Temp. min"
+            value={form.temperatureMin}
+            onChangeText={(text) => setForm({ ...form, temperatureMin: text })}
+          />
+
+          <TextInput
+            style={[styles.input, styles.halfInput]}
+            keyboardType="numeric"
+            placeholder="Temp. max"
+            value={form.temperatureMax}
+            onChangeText={(text) => setForm({ ...form, temperatureMax: text })}
+          />
+        </View>
       </View>
-
-      <View style={styles.row}>
-        <TextInput
-          style={[styles.input, styles.halfInput]}
-          keyboardType="numeric"
-          placeholder="Temp. min"
-          value={form.temperatureMin}
-          onChangeText={(text) => setForm({ ...form, temperatureMin: text })}
-        />
-
-        <TextInput
-          style={[styles.input, styles.halfInput]}
-          keyboardType="numeric"
-          placeholder="Temp. max"
-          value={form.temperatureMax}
-          onChangeText={(text) => setForm({ ...form, temperatureMax: text })}
-        />
-      </View>
-
-      {form.imageUri ? (
-        <Image source={{ uri: form.imageUri }} style={styles.imagePreview} />
-      ) : null}
-
-      <Button
-        label={form.imageUri ? 'Changer la photo' : 'Ajouter une photo'}
-        variant="secondary"
-        onPress={pickImage}
-      />
 
       <Button
         label={isEditing ? 'Enregistrer' : 'Ajouter'}
